@@ -13,7 +13,6 @@ public class Ticket
     public long IdTicket { get; set; }
     
     [Required]
-    [ForeignKey("Funcionario")]
     public long FuncionarioId { get; set; }
     public Funcionario Funcionario { get; set; }
     
@@ -29,7 +28,18 @@ public class Ticket
     }
     
     [Required]
-    public DateTime DataEntrega { get; set; }
-    
+    public DateTime DataEntrega { get; private set; } = DateTime.Now;
+
+    /**
+     * Metodo para validar a criação de um registro, para que a situação não seja por padrão Inativa
+     * 
+     */
+    public void validarCriacao()
+    {
+        if (Situacao == SituacaoEnum.I)
+        {
+            throw new ValidationException("Não é permitido criar um registro Inativo");
+        }
+    }
     
 }

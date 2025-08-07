@@ -8,7 +8,6 @@ namespace SGT.entities;
 public class Funcionario
 {
     [Key]
-    [Required]
     public long IdFuncionario { get; set; }
     
     [Required]
