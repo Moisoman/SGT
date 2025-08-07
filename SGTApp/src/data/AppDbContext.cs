@@ -10,7 +10,7 @@ public class AppDbContext : DbContext
         
     }
     
-    DbSet<Funcionario> Funcionarios { get; set; }
-    DbSet<Ticket> Tickets { get; set; }
-    DbSet<HistoricoTicket> HistoricoTickets { get; set; }
+    public DbSet<Funcionario> Funcionarios { get; set; }
+    public DbSet<Ticket> Tickets { get; set; }
+    public DbSet<HistoricoTicket> HistoricoTickets { get; set; }
 }
