@@ -44,7 +44,7 @@ namespace SGTApp.Tests.services
             };
 
             // When
-            var resultado = await _service.Adicionar(dto);
+            var resultado = await _service.Casdatrar(dto);
 
             // Then
             Assert.IsNotNull(resultado);
@@ -64,7 +64,7 @@ namespace SGTApp.Tests.services
             };
 
             // When / Then
-            var ex = Assert.ThrowsAsync<ValidationException>(async () => await _service.Adicionar(dto));
+            var ex = Assert.ThrowsAsync<ValidationException>(async () => await _service.Casdatrar(dto));
             Assert.That(ex.Erros, Does.Contain("Nome inserido é invalido"));
             Assert.That(ex.Erros, Does.Contain("Cpf inserido é invalido"));
         }
@@ -91,7 +91,7 @@ namespace SGTApp.Tests.services
             };
 
             // When
-            var resultado = await _service.Atualizar(dto, funcionario.IdFuncionario);
+            var resultado = await _service.Editar(dto, funcionario.IdFuncionario);
 
             // Then
             Assert.AreEqual("Atualizado", resultado.Nome);
@@ -111,7 +111,7 @@ namespace SGTApp.Tests.services
             };
 
             // When / Then
-            var ex = Assert.ThrowsAsync<Exception>(async () => await _service.Atualizar(dto, id: 999));
+            var ex = Assert.ThrowsAsync<Exception>(async () => await _service.Editar(dto, id: 999));
             Assert.That(ex.Message, Is.EqualTo("Usuário não encontrado"));
         }
 

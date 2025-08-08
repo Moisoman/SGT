@@ -26,7 +26,7 @@ public class FuncionarioService
         return await _context.Funcionarios.FindAsync(id);
     }
     
-    public async Task<Funcionario> Adicionar(FuncionarioPostDTO dto)
+    public async Task<Funcionario> Casdatrar(FuncionarioPostDTO dto)
     {
         List<string> erros = new List<string>();
 
@@ -57,7 +57,7 @@ public class FuncionarioService
         return funcionario;
     }
 
-    public async Task<Funcionario> Atualizar(FuncionarioPutDTO dto, long id)
+    public async Task<Funcionario> Editar(FuncionarioPutDTO dto, long id)
     {
         List<string> erros = new List<string>();
 
