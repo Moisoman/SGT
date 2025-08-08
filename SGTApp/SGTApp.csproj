@@ -10,7 +10,6 @@
 
     <ItemGroup>
       <Folder Include="src\controllers\" />
-      <Folder Include="src\dto\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -38,6 +37,9 @@
         <SubType>Form</SubType>
       </Compile>
       <Compile Update="MainForm.cs">
+        <SubType>Form</SubType>
+      </Compile>
+      <Compile Update="AtualizarFuncionario.cs">
         <SubType>Form</SubType>
       </Compile>
     </ItemGroup>
