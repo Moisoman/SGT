@@ -99,8 +99,5 @@ public class FuncionarioService
         await _context.SaveChangesAsync();
         
         return funcionarioExistente;
-        
     }
-    
-    
 }

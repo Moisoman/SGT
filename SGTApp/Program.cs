@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using SGTApp.data;
+
 namespace SGTApp;
 
 static class Program
@@ -8,8 +11,12 @@ static class Program
     [STAThread]
     static void Main()
     {
-        // To customize application configuration such as set high DPI settings or default font,
-        // see https://aka.ms/applicationconfiguration.
+        var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+        optionsBuilder.UseSqlite("Data Source=sgtapp.db");
+
+        using var context = new AppDbContext(optionsBuilder.Options);
+        context.Database.EnsureCreated(); 
+
         ApplicationConfiguration.Initialize();
         Application.Run(new MainForm());
     }
