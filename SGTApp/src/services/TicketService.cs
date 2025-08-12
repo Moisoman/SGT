@@ -2,6 +2,7 @@
 using SGT.entities;
 using SGTApp.data;
 using SGTApp.dto.FuncionarioDTO;
+using SGTApp.dto.TicketDTO;
 
 namespace SGTApp.services;
 
@@ -19,15 +20,42 @@ public class TicketService
         return await _context.Tickets.ToListAsync();
     }
 
-    public async Task<Ticket> Ler(long id)
-    {
-        return await _context.Tickets.FindAsync(id);
+    public async Task<TicketGetDTO> Relatorio(TicketGetDTO dto, long id)
+    { 
+        var ticket = await _context.Tickets
+            .Include(t => t.Funcionario) 
+            .FirstOrDefaultAsync(t => t.IdTicket == id);
+
+        if (ticket == null)
+        {
+            return null;
+        }
+        
+        var data = new TicketGetDTO()
+        {
+            IdTicket = ticket.IdTicket,
+            Quantidade = ticket.Quantidade,
+            Situacao = Ticket.TicketEnum.A,
+            FuncionarioId = ticket.FuncionarioId,
+            NomeFuncionario = ticket.Funcionario.Nome, 
+            CpfFuncionario = ticket.Funcionario.Cpf 
+        };
+
+        return data;
     }
 
-    public async Task<Ticket> Cadastrar(FuncionarioPostDTO dto)
+    public async Task<TicketPostDTO> Cadastrar(TicketPostDTO dto)
     {
         List<string> erros = new List<string>();
-        
-        
+
+        return dto;
+
+    }
+
+    public async Task<TicketPutDTO> Editar(TicketPutDTO dto)
+    {
+        List<string> erros = new List<string>();
+
+        return dto;
     }
 }

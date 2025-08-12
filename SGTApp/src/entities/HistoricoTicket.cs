@@ -13,6 +13,10 @@ public class HistoricoTicket
     [Required]
     public long TicketId { get; set; }
     public Ticket Ticket { get; set; }
+    
+    [Required]
+    public long FuncionarioId { get; set; }
+    public Funcionario Funcionario { get; set; }
 
     [Required] 
     public bool StatusConsumo { get; private set; } = true;

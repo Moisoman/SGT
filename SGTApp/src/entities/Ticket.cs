@@ -20,9 +20,9 @@ public class Ticket
     public long Quantidade { get; set; }
     
     [Required]
-    public SituacaoEnum Situacao { get; set; }
+    public TicketEnum Situacao { get; set; }
 
-    public enum SituacaoEnum
+    public enum TicketEnum
     {
         A,I
     }
@@ -36,7 +36,7 @@ public class Ticket
      */
     public void validarCriacao()
     {
-        if (Situacao == SituacaoEnum.I)
+        if (Situacao == TicketEnum.I)
         {
             throw new ValidationException("Não é permitido criar um registro Inativo");
         }
