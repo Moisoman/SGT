@@ -25,7 +25,7 @@ public class FuncionarioController
 
     public async Task<Funcionario> Cadastrar(FuncionarioPostDTO funcionario)
     {
-        return await _funcionarioService.Casdatrar(funcionario);
+        return await _funcionarioService.Cadastrar(funcionario);
     }
 
     public async Task<Funcionario> Editar(FuncionarioPutDTO funcionario,long id)

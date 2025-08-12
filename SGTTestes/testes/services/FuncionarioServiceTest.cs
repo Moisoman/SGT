@@ -44,7 +44,7 @@ namespace SGTApp.Tests.services
             };
 
             // When
-            var resultado = await _service.Casdatrar(dto);
+            var resultado = await _service.Cadastrar(dto);
 
             // Then
             Assert.IsNotNull(resultado);
@@ -64,7 +64,7 @@ namespace SGTApp.Tests.services
             };
 
             // When / Then
-            var ex = Assert.ThrowsAsync<ValidationException>(async () => await _service.Casdatrar(dto));
+            var ex = Assert.ThrowsAsync<ValidationException>(async () => await _service.Cadastrar(dto));
             Assert.That(ex.Erros, Does.Contain("Nome inserido é invalido"));
             Assert.That(ex.Erros, Does.Contain("Cpf inserido é invalido"));
         }

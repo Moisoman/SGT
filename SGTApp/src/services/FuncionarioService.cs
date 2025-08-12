@@ -26,7 +26,7 @@ public class FuncionarioService
         return await _context.Funcionarios.FindAsync(id);
     }
     
-    public async Task<Funcionario> Casdatrar(FuncionarioPostDTO dto)
+    public async Task<Funcionario> Cadastrar(FuncionarioPostDTO dto)
     {
         List<string> erros = new List<string>();
 
