@@ -33,10 +33,10 @@ partial class MainForm
     {
         label1 = new System.Windows.Forms.Label();
         label2 = new System.Windows.Forms.Label();
-        button1 = new System.Windows.Forms.Button();
-        button2 = new System.Windows.Forms.Button();
-        button3 = new System.Windows.Forms.Button();
-        button4 = new System.Windows.Forms.Button();
+        CadastrarFuncionario = new System.Windows.Forms.Button();
+        CadastrarTicket = new System.Windows.Forms.Button();
+        AtualizarFuncionario = new System.Windows.Forms.Button();
+        AtualizarTicket = new System.Windows.Forms.Button();
         label3 = new System.Windows.Forms.Label();
         label4 = new System.Windows.Forms.Label();
         label5 = new System.Windows.Forms.Label();
@@ -63,43 +63,45 @@ partial class MainForm
         label2.Text = "Escolha qual ação deseja realizar";
         label2.TextAlign = System.Drawing.ContentAlignment.TopCenter;
         // 
-        // button1
+        // CadastrarFuncionario
         // 
-        button1.Location = new System.Drawing.Point(12, 189);
-        button1.Name = "button1";
-        button1.Size = new System.Drawing.Size(73, 39);
-        button1.TabIndex = 2;
-        button1.Text = "Continuar";
-        button1.UseVisualStyleBackColor = true;
+        CadastrarFuncionario.Location = new System.Drawing.Point(12, 189);
+        CadastrarFuncionario.Name = "CadastrarFuncionario";
+        CadastrarFuncionario.Size = new System.Drawing.Size(73, 39);
+        CadastrarFuncionario.TabIndex = 2;
+        CadastrarFuncionario.Text = "Continuar";
+        CadastrarFuncionario.UseVisualStyleBackColor = true;
+        CadastrarFuncionario.Click += CadastrarFuncionario_Click;
         // 
-        // button2
+        // CadastrarTicket
         // 
-        button2.Location = new System.Drawing.Point(12, 299);
-        button2.Name = "button2";
-        button2.Size = new System.Drawing.Size(73, 39);
-        button2.TabIndex = 3;
-        button2.Text = "Continuar";
-        button2.UseVisualStyleBackColor = true;
-        button2.Click += button2_Click;
+        CadastrarTicket.Location = new System.Drawing.Point(12, 299);
+        CadastrarTicket.Name = "CadastrarTicket";
+        CadastrarTicket.Size = new System.Drawing.Size(73, 39);
+        CadastrarTicket.TabIndex = 3;
+        CadastrarTicket.Text = "Continuar";
+        CadastrarTicket.UseVisualStyleBackColor = true;
+        CadastrarTicket.Click += CadastrarTicket_Click;
         // 
-        // button3
+        // AtualizarFuncionario
         // 
-        button3.Location = new System.Drawing.Point(128, 189);
-        button3.Name = "button3";
-        button3.Size = new System.Drawing.Size(73, 39);
-        button3.TabIndex = 4;
-        button3.Text = "Continuar";
-        button3.UseVisualStyleBackColor = true;
-        button3.Click += button3_Click;
+        AtualizarFuncionario.Location = new System.Drawing.Point(128, 189);
+        AtualizarFuncionario.Name = "AtualizarFuncionario";
+        AtualizarFuncionario.Size = new System.Drawing.Size(73, 39);
+        AtualizarFuncionario.TabIndex = 4;
+        AtualizarFuncionario.Text = "Continuar";
+        AtualizarFuncionario.UseVisualStyleBackColor = true;
+        AtualizarFuncionario.Click += AtualizarFuncionario_Click;
         // 
-        // button4
+        // AtualizarTicket
         // 
-        button4.Location = new System.Drawing.Point(128, 299);
-        button4.Name = "button4";
-        button4.Size = new System.Drawing.Size(73, 39);
-        button4.TabIndex = 5;
-        button4.Text = "Continuar";
-        button4.UseVisualStyleBackColor = true;
+        AtualizarTicket.Location = new System.Drawing.Point(128, 299);
+        AtualizarTicket.Name = "AtualizarTicket";
+        AtualizarTicket.Size = new System.Drawing.Size(73, 39);
+        AtualizarTicket.TabIndex = 5;
+        AtualizarTicket.Text = "Continuar";
+        AtualizarTicket.UseVisualStyleBackColor = true;
+        AtualizarTicket.Click += AtualizarTicket_Click;
         // 
         // label3
         // 
@@ -142,10 +144,10 @@ partial class MainForm
         Controls.Add(label5);
         Controls.Add(label4);
         Controls.Add(label3);
-        Controls.Add(button4);
-        Controls.Add(button3);
-        Controls.Add(button2);
-        Controls.Add(button1);
+        Controls.Add(AtualizarTicket);
+        Controls.Add(AtualizarFuncionario);
+        Controls.Add(CadastrarTicket);
+        Controls.Add(CadastrarFuncionario);
         Controls.Add(label2);
         Controls.Add(label1);
         Text = "MainForm";
@@ -157,10 +159,10 @@ partial class MainForm
     private System.Windows.Forms.Label label5;
     private System.Windows.Forms.Label label6;
 
-    private System.Windows.Forms.Button button1;
-    private System.Windows.Forms.Button button2;
-    private System.Windows.Forms.Button button3;
-    private System.Windows.Forms.Button button4;
+    private System.Windows.Forms.Button CadastrarFuncionario;
+    private System.Windows.Forms.Button CadastrarTicket;
+    private System.Windows.Forms.Button AtualizarFuncionario;
+    private System.Windows.Forms.Button AtualizarTicket;
 
     private System.Windows.Forms.Label label2;
 

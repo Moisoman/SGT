@@ -16,7 +16,7 @@ public class HistoricoTicket
     
     [Required]
     public long FuncionarioId { get; set; }
-    public Funcionario Funcionario { get; set; }
+    public Funcionario? Funcionario { get; set; }
 
     [Required] 
     public bool StatusConsumo { get; private set; } = true;

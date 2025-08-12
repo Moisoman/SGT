@@ -52,7 +52,7 @@ public class FuncionarioService
         funcionario.DataAlteracao = DateTime.Now;
         
         await _context.Funcionarios.AddAsync(funcionario);
-        await _context.SaveChangesAsync();
+        _context.SaveChanges();
 
         return funcionario;
     }

@@ -9,7 +9,7 @@ namespace SGTApp.data
         public AppDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-            optionsBuilder.UseSqlite("Data Source=sgtapp.db");
+            optionsBuilder.UseSqlite("Data Source=sgtAppDb.db");
 
             return new AppDbContext(optionsBuilder.Options);
         }

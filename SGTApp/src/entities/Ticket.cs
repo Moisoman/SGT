@@ -14,7 +14,7 @@ public class Ticket
     
     [Required]
     public long FuncionarioId { get; set; }
-    public Funcionario Funcionario { get; set; }
+    public Funcionario? Funcionario { get; set; }
     
     [Required]
     public long Quantidade { get; set; }

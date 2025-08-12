@@ -5,6 +5,8 @@ namespace SGTApp.data;
 
 public class AppDbContext : DbContext
 {
+    protected override void OnConfiguring(DbContextOptionsBuilder options)
+        => options.UseSqlite("Data Source=sgtAppDb.db");
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
         
