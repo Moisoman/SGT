@@ -13,4 +13,6 @@ public class FuncionarioPutDTO
     public string? Cpf { get; set; }
     
     public  Funcionario.SituacaoEnum? Situacao { get; set; }
+    
+    public DateTime? DataAlteracao { get; set; }
 }

@@ -28,18 +28,6 @@ public class Ticket
     }
     
     [Required]
-    public DateTime DataEntrega { get; private set; } = DateTime.Now;
-
-    /**
-     * Metodo para validar a criação de um registro, para que a situação não seja por padrão Inativa
-     * 
-     */
-    public void validarCriacao()
-    {
-        if (Situacao == TicketEnum.I)
-        {
-            throw new ValidationException("Não é permitido criar um registro Inativo");
-        }
-    }
+    public DateTime DataEntrega { get; private set; } = DateTime.UtcNow;
     
 }

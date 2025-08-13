@@ -40,6 +40,11 @@ public class FuncionarioService
             erros.Add("Nome inserido é invalido");
         }
 
+        if (_context.Funcionarios.Any(f => f.Cpf == dto.Cpf))
+        {
+            erros.Add("Um usuário com esse CPF já existe no sistema");
+        }
+
         if (erros.Count > 0)
         {
             throw new ValidationException(erros);
@@ -49,10 +54,10 @@ public class FuncionarioService
         funcionario.Cpf = dto.Cpf;
         funcionario.Nome = dto.Nome;
         funcionario.Situacao = Funcionario.SituacaoEnum.A;
-        funcionario.DataAlteracao = DateTime.Now;
+        funcionario.DataAlteracao = DateTime.UtcNow;
         
         await _context.Funcionarios.AddAsync(funcionario);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
 
         return funcionario;
     }
@@ -94,7 +99,7 @@ public class FuncionarioService
             throw new ValidationException(erros);
         }
         
-        funcionarioExistente.DataAlteracao = DateTime.Now;
+        funcionarioExistente.DataAlteracao = DateTime.UtcNow;
         
         await _context.SaveChangesAsync();
         

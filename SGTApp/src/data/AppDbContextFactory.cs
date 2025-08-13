@@ -9,7 +9,7 @@ namespace SGTApp.data
         public AppDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-            optionsBuilder.UseSqlite("Data Source=sgtAppDb.db");
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Username=postgres;Password=123456789;Database=Sgtapp");
 
             return new AppDbContext(optionsBuilder.Options);
         }

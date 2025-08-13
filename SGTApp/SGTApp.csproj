@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>WinExe</OutputType>
+        <OutputType>Exe</OutputType>
         <TargetFramework>net9.0-windows</TargetFramework>
         <Nullable>enable</Nullable>
         <UseWindowsForms>true</UseWindowsForms>
@@ -20,6 +20,7 @@
         <PrivateAssets>all</PrivateAssets>
       </PackageReference>
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0-preview.6.25358.103" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSql" Version="9.0.4" />
       <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.3" />
     </ItemGroup>
 
@@ -28,18 +29,6 @@
         <SubType>Form</SubType>
       </Compile>
       <Compile Update="src\views\CadastroTicket.cs">
-        <SubType>Form</SubType>
-      </Compile>
-      <Compile Update="CadastroTicket.cs">
-        <SubType>Form</SubType>
-      </Compile>
-      <Compile Update="CadastroFuncionario.cs">
-        <SubType>Form</SubType>
-      </Compile>
-      <Compile Update="MainForm.cs">
-        <SubType>Form</SubType>
-      </Compile>
-      <Compile Update="AtualizarFuncionario.cs">
         <SubType>Form</SubType>
       </Compile>
     </ItemGroup>
