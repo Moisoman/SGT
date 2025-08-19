@@ -66,7 +66,25 @@ public class FuncionarioServiceTests
         // When / Then
         var ex = Assert.ThrowsAsync<ValidationException>(async () => await _funcionarioService.Cadastrar(dto));
         Assert.That(ex.Erros, Does.Contain("Nome inserido é invalido"));
-        Assert.That(ex.Erros, Does.Contain("Cpf inserido é invalido"));
+        Assert.That(ex.Erros, Does.Contain("É obrigatório informar o CPF"));
+    }
+    
+    [Test]
+    public async Task Cadastrar_DeveAceitarCpfComMascara()
+    {
+        // Given
+        var dto = new FuncionarioPostDTO
+        {
+            Nome = "José",
+            Cpf = "123.456.789-00" 
+        };
+
+        // When
+        var funcionario = await _funcionarioService.Cadastrar(dto);
+
+        // Then
+        Assert.IsNotNull(funcionario);
+        Assert.AreEqual("12345678900", funcionario.Cpf); 
     }
 
     [Test]

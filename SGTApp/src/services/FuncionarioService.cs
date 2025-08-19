@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
 using SGT.entities;
 using SGTApp.data;
 using SGTApp.dto.FuncionarioDTO;
@@ -32,9 +33,17 @@ public class FuncionarioService
     {
         List<string> erros = new List<string>();
 
-        if (string.IsNullOrWhiteSpace(dto.Cpf) || dto.Cpf.Length != 11)
+        if (string.IsNullOrWhiteSpace(dto.Cpf))
         {
-            erros.Add("Cpf inserido é invalido");
+            erros.Add("É obrigatório informar o CPF");
+        }
+        else
+        {
+            dto.Cpf = Regex.Replace(dto.Cpf ?? "", @"[^\d]", "");
+            if (dto.Cpf.Length != 11)
+            {
+                erros.Add("Cpf inserido é invalido");
+            }
         }
 
         if (string.IsNullOrWhiteSpace(dto.Nome))
