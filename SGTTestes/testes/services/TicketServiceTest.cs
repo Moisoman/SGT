@@ -34,48 +34,55 @@ public class TicketServiceTest
         // Given
         var tickets = new List<Ticket>
         {
-            new Ticket { IdTicket = 1, Quantidade = 10, Situacao = Ticket.TicketEnum.A },
-            new Ticket { IdTicket = 2, Quantidade = 5, Situacao = Ticket.TicketEnum.A }
+            new Ticket { IdTicket = 1, Situacao = Ticket.TicketEnum.A },
+            new Ticket { IdTicket = 2, Situacao = Ticket.TicketEnum.A }
         };
         
-        await _ticketService.Cadastrar(new TicketPostDTO { FuncionarioId = 1, Quantidade = 10, Situacao = Ticket.TicketEnum.A });
-        await _ticketService.Cadastrar(new TicketPostDTO { FuncionarioId = 2, Quantidade = 5, Situacao = Ticket.TicketEnum.A });
+        await _ticketService.Cadastrar(new TicketPostDTO { FuncionarioId = 1,});
+        await _ticketService.Cadastrar(new TicketPostDTO { FuncionarioId = 2,});
 
         // When
         var result = await _ticketService.Listar();
 
         // Then
         Assert.AreEqual(2, result.Count);
-        Assert.AreEqual(10, result[0].Quantidade);
-        Assert.AreEqual(5, result[1].Quantidade);
+        Assert.AreEqual(1, result[0].Quantidade);
+        Assert.AreEqual(1, result[1].Quantidade);
     }
     
     [Test]
     public async Task Relatorio_DeveRetornarTicketComFuncionario()
     {
         // Given
-        var ticket = new Ticket { IdTicket = 1, FuncionarioId = 1, Quantidade = 10, Situacao = Ticket.TicketEnum.A };
-        var funcionario = new Funcionario { IdFuncionario = 1, Nome = "João", Cpf = "12345678901" };
+        var funcionario = new Funcionario { IdFuncionario = 1, Nome = "João", Cpf = "12345678901", Situacao = Funcionario.SituacaoEnum.A };
+        var ticket1 = new Ticket { IdTicket = 1, FuncionarioId = 1, Quantidade = 10, Situacao = Ticket.TicketEnum.A, DataEntrega = DateTime.UtcNow.AddDays(-5) };
+        var ticket2 = new Ticket { IdTicket = 2, FuncionarioId = 1, Quantidade = 5, Situacao = Ticket.TicketEnum.A, DataEntrega = DateTime.UtcNow.AddDays(-3) };
 
-        await _ticketService.Cadastrar(new TicketPostDTO { FuncionarioId = 1, Quantidade = 10, Situacao = Ticket.TicketEnum.A });
         await _context.Funcionarios.AddAsync(funcionario);
+        await _context.Tickets.AddAsync(ticket1);
+        await _context.Tickets.AddAsync(ticket2);
         await _context.SaveChangesAsync();
 
         // When
-        var result = await _ticketService.Relatorio(new TicketGetDTO(), 1);
+        DateTime dataInicio = DateTime.UtcNow.AddDays(-7); 
+        DateTime dataFim = DateTime.UtcNow; 
+
+        var result = await _ticketService.Relatorio(funcionario.IdFuncionario, dataInicio, dataFim);
 
         // Then
-        Assert.IsNotNull(result);
-        Assert.AreEqual(1, result.IdTicket);
-        Assert.AreEqual("João", result.NomeFuncionario);
-        Assert.AreEqual("12345678901", result.CpfFuncionario);
+        Assert.IsNotNull(result); 
+        Assert.AreEqual(funcionario.IdFuncionario, result.FuncionarioId); 
+        Assert.AreEqual("João", result.NomeFuncionario); 
+        Assert.AreEqual("12345678901", result.CpfFuncionario); 
+        Assert.AreEqual(15, result.TotalQuantidade); 
+        Assert.AreEqual(Ticket.TicketEnum.A, result.Situacao); 
     }
     
     [Test]
     public async Task Cadastrar_DeveCriarTicketComSucesso()
     {
         // Given
-        var dto = new TicketPostDTO { FuncionarioId = 1, Quantidade = 10, Situacao = Ticket.TicketEnum.A };
+        var dto = new TicketPostDTO { FuncionarioId = 1,};
 
         // When
         var result = await _ticketService.Cadastrar(dto);
@@ -83,7 +90,7 @@ public class TicketServiceTest
         // Then
         Assert.IsNotNull(result);
         Assert.AreEqual(1, result.FuncionarioId);
-        Assert.AreEqual(10, result.Quantidade);
+        Assert.AreEqual(1, result.Quantidade);
         Assert.AreEqual(Ticket.TicketEnum.A, result.Situacao);
     }
     
@@ -91,11 +98,11 @@ public class TicketServiceTest
     public void Cadastrar_DeveLancarExceptionQuandoFuncionarioIdInvalido()
     {
         // Given
-        var dto = new TicketPostDTO { FuncionarioId = -1, Quantidade = 10, Situacao = Ticket.TicketEnum.A };
+        var dto = new TicketPostDTO { FuncionarioId = -1,};
 
         // When / Then
-        var ex = Assert.ThrowsAsync<ValidationException>(async () => await _ticketService.Cadastrar(dto));
-        Assert.AreEqual("Identificador de Funcionário inválido", ex.Erros[0]);
+        var ex = Assert.ThrowsAsync<Exception>(async () => await _ticketService.Cadastrar(dto));
+        Assert.AreEqual("Funcionário não encontrado ou Identificador de Funcionário Inválido", ex.Message);
     }
     
     [Test]
@@ -106,7 +113,7 @@ public class TicketServiceTest
         var ticket = new Ticket()
         {
             FuncionarioId = 1,
-            Quantidade = 10,
+            Quantidade = 1,
             Situacao = Ticket.TicketEnum.A
         };
         
@@ -115,8 +122,7 @@ public class TicketServiceTest
         var dto = new TicketPutDTO
         {
             FuncionarioId = 2, 
-            Quantidade = 20, 
-            Situacao = Ticket.TicketEnum.A
+            Situacao = Ticket.TicketEnum.I
         };
         
         // When
@@ -124,8 +130,8 @@ public class TicketServiceTest
 
         // Then
         Assert.AreEqual(2, result.FuncionarioId); 
-        Assert.AreEqual(20, result.Quantidade); 
-        Assert.AreEqual(Ticket.TicketEnum.A, result.Situacao);
+        Assert.AreEqual(1, result.Quantidade); 
+        Assert.AreEqual(Ticket.TicketEnum.I, result.Situacao);
     }
     
     [Test]

@@ -30,4 +30,7 @@ public class Ticket
     [Required]
     public DateTime DataEntrega { get; set; }
     
+    [Required]
+    public DateTime DataAlteracao { get; set; }
+    
 }

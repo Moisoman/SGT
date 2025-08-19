@@ -18,9 +18,9 @@ public class TicketController
         return await _ticketService.Listar();
     }
 
-    public async Task<TicketGetDTO> Relatorio(TicketGetDTO dto, long id)
+    public async Task<TicketGetDTO> Relatorio(long id, DateTime dataInicio, DateTime dataFim)
     {
-        return await _ticketService.Relatorio(dto, id);
+        return await _ticketService.Relatorio(id, dataInicio,dataFim);
     }
 
     public async Task<Ticket> Cadastrar(TicketPostDTO dto)

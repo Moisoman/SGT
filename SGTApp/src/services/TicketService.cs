@@ -27,25 +27,27 @@ public class TicketService
     /**
      * Metodo para gerar um relatorio de tickets distribuídos para um determinado funcionario
      */
-    public async Task<TicketGetDTO> Relatorio(TicketGetDTO dto, long id)
+    public async Task<TicketGetDTO> Relatorio(long funcionarioId, DateTime dataInicio, DateTime dataFim)
     { 
-        var ticket = await _context.Tickets
+        var tickets = await _context.Tickets
+            .Where(t => t.FuncionarioId == funcionarioId && t.DataEntrega >= dataInicio && t.DataEntrega <= dataFim)
             .Include(t => t.Funcionario) 
-            .FirstOrDefaultAsync(t => t.IdTicket == id);
+            .ToListAsync();
 
-        if (ticket == null)
+        if (tickets == null || tickets.Count == 0)
         {
-            return null;
+            throw new Exception("Não há Tickets cadastrados para esse Funcionário"); 
         }
+        
+        var totalQuantidade = tickets.Sum(t => t.Quantidade);
         
         var data = new TicketGetDTO()
         {
-            IdTicket = ticket.IdTicket,
-            Quantidade = ticket.Quantidade,
-            Situacao = Ticket.TicketEnum.A,
-            FuncionarioId = ticket.FuncionarioId,
-            NomeFuncionario = ticket.Funcionario.Nome, 
-            CpfFuncionario = ticket.Funcionario.Cpf 
+            TotalQuantidade = totalQuantidade,
+            Situacao = tickets.First().Situacao,
+            FuncionarioId = funcionarioId,
+            NomeFuncionario = tickets.First().Funcionario.Nome, 
+            CpfFuncionario =  tickets.First().Funcionario.Cpf,
         };
 
         return data;
@@ -59,27 +61,12 @@ public class TicketService
 
         if (dto.FuncionarioId == null || dto.FuncionarioId < 0)
         {
-            erros.Add("Identificador de Funcionário inválido");
+            throw new Exception("Funcionário não encontrado ou Identificador de Funcionário Inválido");
         }
-
-        if (dto.Quantidade <= 0)
-        {
-            erros.Add("Quantidade Inválida: deve pelo menos entregar uma unidade de Ticket");
-        }
-
-        if (dto.Situacao == Ticket.TicketEnum.I)
-        {
-            erros.Add("Situação Inválida: Não é possível cadastrar um ticket como inativo");
-        }
-
-        if (erros.Count > 0)
-        {
-            throw new ValidationException(erros);
-        }
-
+        
         Ticket ticket = new Ticket();
         ticket.FuncionarioId = dto.FuncionarioId;
-        ticket.Quantidade = dto.Quantidade;
+        ticket.Quantidade = 1;
         ticket.Situacao = Ticket.TicketEnum.A;
         ticket.DataEntrega = DateTime.UtcNow; //UtcNow pois é o tipo de datetime compatível com o banco PgSql
         
@@ -116,21 +103,9 @@ public class TicketService
             }
         }
         
-        if (dto.Quantidade != null)
-        {
-            if (dto.Quantidade < 0)
-            {
-                erros.Add("A quantidade de Tickets deve ser maior que zero");
-            }
-            else
-            {
-                ticketExistente.Quantidade = dto.Quantidade;
-            }
-        }
-        
         if (dto.Situacao != null)
         {
-            ticketExistente.Situacao = dto.Situacao;
+            ticketExistente.Situacao = dto.Situacao.Value;
         }
         
         if (erros.Count > 0)
@@ -138,8 +113,6 @@ public class TicketService
             throw new ValidationException(erros);
         }
         
-        ticketExistente.DataEntrega = DateTime.UtcNow;
-
         await _context.SaveChangesAsync();
 
         return ticketExistente;

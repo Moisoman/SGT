@@ -21,7 +21,7 @@ public class Funcionario
 
     public DateTime DataAlteracao { get; set; }
 
-    public ICollection<Ticket> Tickets { get; set; }
+    public ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
     
     public enum SituacaoEnum
     {

@@ -13,5 +13,5 @@ public class TicketPutDTO
     public long Quantidade { get; set; }
     
     [Required]
-    public Ticket.TicketEnum Situacao { get; set; }
+    public Ticket.TicketEnum? Situacao { get; set; }
 }

@@ -21,4 +21,6 @@ public class TicketGetDTO
     public string NomeFuncionario { get; set; }
     
     public string CpfFuncionario { get; set; }
+    
+    public long TotalQuantidade { get; set; }
 }
