@@ -13,5 +13,5 @@ public class TicketPostDTO
     public long Quantidade { get; set; }
     
     [Required]
-    public Funcionario.SituacaoEnum Situacao { get; set; }
+    public Ticket.TicketEnum Situacao { get; set; }
 }

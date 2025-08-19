@@ -6,7 +6,9 @@ using SGTApp.utils;
 
 namespace SGTApp.services;
 
-
+/**
+ * Serviço de Funcionario do Sistema(Ler,Listar,Cadastrar,Editar)
+ */
 public class FuncionarioService 
 {
     private readonly AppDbContext _context;
@@ -30,7 +32,7 @@ public class FuncionarioService
     {
         List<string> erros = new List<string>();
 
-        if (string.IsNullOrWhiteSpace(dto.Cpf))
+        if (string.IsNullOrWhiteSpace(dto.Cpf) || dto.Cpf.Length != 11)
         {
             erros.Add("Cpf inserido é invalido");
         }
@@ -40,7 +42,7 @@ public class FuncionarioService
             erros.Add("Nome inserido é invalido");
         }
 
-        if (_context.Funcionarios.Any(f => f.Cpf == dto.Cpf))
+        if (await _context.Funcionarios.AnyAsync(f => f.Cpf == dto.Cpf))
         {
             erros.Add("Um usuário com esse CPF já existe no sistema");
         }
@@ -75,7 +77,7 @@ public class FuncionarioService
         
         if (dto.Cpf != null)
         {
-            if (string.IsNullOrWhiteSpace(dto.Cpf))
+            if (string.IsNullOrWhiteSpace(dto.Cpf) || dto.Cpf.Length != 11)
                 erros.Add("CPF inserido é inválido");
             else
                 funcionarioExistente.Cpf = dto.Cpf;

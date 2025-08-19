@@ -28,6 +28,6 @@ public class Ticket
     }
     
     [Required]
-    public DateTime DataEntrega { get; private set; } = DateTime.UtcNow;
+    public DateTime DataEntrega { get; set; }
     
 }

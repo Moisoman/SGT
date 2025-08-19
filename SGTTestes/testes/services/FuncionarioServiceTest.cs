@@ -8,154 +8,177 @@ using SGTApp.dto.FuncionarioDTO;
 using SGTApp.services;
 using SGTApp.utils;
 
-namespace SGTApp.Tests.services
+namespace SGTApp.Tests.services;
+
+[TestFixture]
+public class FuncionarioServiceTests
 {
-    [TestFixture]
-    public class FuncionarioServiceTests
+    private AppDbContext _context;
+    private FuncionarioService _funcionarioService;
+
+    [SetUp]
+    public void Setup()
     {
-        private AppDbContext _context;
-        private FuncionarioService _service;
+        var options = new DbContextOptionsBuilder<AppDbContext>()
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .Options;
 
-        [SetUp]
-        public void Setup()
+        _context = new AppDbContext(options);
+        _funcionarioService = new FuncionarioService(_context);
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        _context.Dispose();
+    }
+
+    [Test]
+    public async Task AdicionarFuncionarioDeveRetornarFuncionarioValido()
+    {
+        // Given
+        var dto = new FuncionarioPostDTO
         {
-            var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) 
-                .Options;
+            Nome = "Maria",
+            Cpf = "12345678900"
+        };
 
-            _context = new AppDbContext(options);
-            _service = new FuncionarioService(_context);
-        }
+        // When
+        var resultado = await _funcionarioService.Cadastrar(dto);
 
-        [TearDown]
-        public void TearDown()
+        // Then
+        Assert.IsNotNull(resultado);
+        Assert.AreEqual("Maria", resultado.Nome);
+        Assert.AreEqual("12345678900", resultado.Cpf);
+        Assert.AreEqual(Funcionario.SituacaoEnum.A, resultado.Situacao);
+    }
+
+    [Test]
+    public void AdicionarFuncionarioInvalidoDeveLancarValidationException()
+    {
+        // Given
+        var dto = new FuncionarioPostDTO
         {
-            _context.Dispose();
-        }
+            Nome = "",
+            Cpf = null
+        };
 
-        [Test]
-        public async Task AdicionarFuncionarioDeveRetornarFuncionarioValido()
+        // When / Then
+        var ex = Assert.ThrowsAsync<ValidationException>(async () => await _funcionarioService.Cadastrar(dto));
+        Assert.That(ex.Erros, Does.Contain("Nome inserido é invalido"));
+        Assert.That(ex.Erros, Does.Contain("Cpf inserido é invalido"));
+    }
+
+    [Test]
+    public async Task AtualizarFuncionarioExistenteDeveAlterarDados()
+    {
+        // Given
+        var funcionario = new Funcionario
         {
-            // Given
-            var dto = new FuncionarioPostDTO
-            {
-                Nome = "Maria",
-                Cpf = "12345678900"
-            };
+            Nome = "Antigo",
+            Cpf = "00000000000",
+            Situacao = Funcionario.SituacaoEnum.I,
+            DataAlteracao = DateTime.Now
+        };
+        await _context.Funcionarios.AddAsync(funcionario);
+        await _context.SaveChangesAsync();
 
-            // When
-            var resultado = await _service.Cadastrar(dto);
-
-            // Then
-            Assert.IsNotNull(resultado);
-            Assert.AreEqual("Maria", resultado.Nome);
-            Assert.AreEqual("12345678900", resultado.Cpf);
-            Assert.AreEqual(Funcionario.SituacaoEnum.A, resultado.Situacao);
-        }
-
-        [Test]
-        public void AdicionarFuncionarioInvalidoDeveLancarValidationException()
+        var dto = new FuncionarioPutDTO
         {
-            // Given
-            var dto = new FuncionarioPostDTO
-            {
-                Nome = "", 
-                Cpf = null 
-            };
+            Nome = "Atualizado",
+            Cpf = "11111111111",
+            Situacao = Funcionario.SituacaoEnum.A
+        };
 
-            // When / Then
-            var ex = Assert.ThrowsAsync<ValidationException>(async () => await _service.Cadastrar(dto));
-            Assert.That(ex.Erros, Does.Contain("Nome inserido é invalido"));
-            Assert.That(ex.Erros, Does.Contain("Cpf inserido é invalido"));
-        }
+        // When
+        var resultado = await _funcionarioService.Editar(dto, funcionario.IdFuncionario);
 
-        [Test]
-        public async Task AtualizarFuncionarioExistenteDeveAlterarDados()
+        // Then
+        Assert.AreEqual("Atualizado", resultado.Nome);
+        Assert.AreEqual("11111111111", resultado.Cpf);
+        Assert.AreEqual(Funcionario.SituacaoEnum.A, resultado.Situacao);
+    }
+
+    [Test]
+    public void AtualizarFuncionarioInexistenteDeveLancarException()
+    {
+        // Given
+        var dto = new FuncionarioPutDTO
         {
-            // Given
-            var funcionario = new Funcionario
-            {
-                Nome = "Antigo",
-                Cpf = "00000000000",
-                Situacao = Funcionario.SituacaoEnum.I,
-                DataAlteracao = DateTime.Now
-            };
-            await _context.Funcionarios.AddAsync(funcionario);
-            await _context.SaveChangesAsync();
+            Nome = "Teste",
+            Cpf = "99999999999",
+            Situacao = Funcionario.SituacaoEnum.A
+        };
 
-            var dto = new FuncionarioPutDTO
-            {
-                Nome = "Atualizado",
-                Cpf = "11111111111",
-                Situacao = Funcionario.SituacaoEnum.A
-            };
+        // When / Then
+        var ex = Assert.ThrowsAsync<Exception>(async () => await _funcionarioService.Editar(dto, id: 999));
+        Assert.That(ex.Message, Is.EqualTo("Usuário não encontrado"));
+    }
 
-            // When
-            var resultado = await _service.Editar(dto, funcionario.IdFuncionario);
-
-            // Then
-            Assert.AreEqual("Atualizado", resultado.Nome);
-            Assert.AreEqual("11111111111", resultado.Cpf);
-            Assert.AreEqual(Funcionario.SituacaoEnum.A, resultado.Situacao);
-        }
-
-        [Test]
-        public void AtualizarFuncionarioInexistenteDeveLancarException()
+    [Test]
+    public async Task ListarFuncionariosDeveRetornarListaComElementos()
+    {
+        // Given
+        await _context.Funcionarios.AddAsync(new Funcionario
         {
-            // Given
-            var dto = new FuncionarioPutDTO
-            {
-                Nome = "Teste",
-                Cpf = "99999999999",
-                Situacao = Funcionario.SituacaoEnum.A
-            };
+            Nome = "Carlos",
+            Cpf = "22222222222",
+            Situacao = Funcionario.SituacaoEnum.A,
+            DataAlteracao = DateTime.Now
+        });
+        await _context.SaveChangesAsync();
 
-            // When / Then
-            var ex = Assert.ThrowsAsync<Exception>(async () => await _service.Editar(dto, id: 999));
-            Assert.That(ex.Message, Is.EqualTo("Usuário não encontrado"));
-        }
+        // When
+        var resultado = await _funcionarioService.Listar();
 
-        [Test]
-        public async Task ListarFuncionariosDeveRetornarListaComElementos()
+        // Then
+        Assert.That(resultado, Is.Not.Empty);
+        Assert.That(resultado[0].Nome, Is.EqualTo("Carlos"));
+    }
+
+    [Test]
+    public async Task LerFuncionarioExistenteDeveRetornarFuncionario()
+    {
+        // Given
+        var funcionario = new Funcionario
         {
-            // Given
-            await _context.Funcionarios.AddAsync(new Funcionario
-            {
-                Nome = "Carlos",
-                Cpf = "22222222222",
-                Situacao = Funcionario.SituacaoEnum.A,
-                DataAlteracao = DateTime.Now
-            });
-            await _context.SaveChangesAsync();
+            Nome = "João",
+            Cpf = "33333333333",
+            Situacao = Funcionario.SituacaoEnum.A,
+            DataAlteracao = DateTime.Now
+        };
+        await _context.Funcionarios.AddAsync(funcionario);
+        await _context.SaveChangesAsync();
 
-            // When
-            var resultado = await _service.Listar();
+        // When
+        var resultado = await _funcionarioService.Ler(funcionario.IdFuncionario);
 
-            // Then
-            Assert.That(resultado, Is.Not.Empty);
-            Assert.That(resultado[0].Nome, Is.EqualTo("Carlos"));
-        }
+        // Then
+        Assert.IsNotNull(resultado);
+        Assert.AreEqual("João", resultado.Nome);
+    }
 
-        [Test]
-        public async Task LerFuncionarioExistenteDeveRetornarFuncionario()
+    [Test]
+    public async Task CadastrarFuncionarioComCpfDuplicadoDeveLancarValidationException()
+    {
+        // Given
+        var dto1 = new FuncionarioPostDTO
         {
-            // Given
-            var funcionario = new Funcionario
-            {
-                Nome = "João",
-                Cpf = "33333333333",
-                Situacao = Funcionario.SituacaoEnum.A,
-                DataAlteracao = DateTime.Now
-            };
-            await _context.Funcionarios.AddAsync(funcionario);
-            await _context.SaveChangesAsync();
+            Nome = "João",
+            Cpf = "12345678900"
+        };
+        await _funcionarioService.Cadastrar(dto1);
 
-            // When
-            var resultado = await _service.Ler(funcionario.IdFuncionario);
+        // Given
+        var dto2 = new FuncionarioPostDTO
+        {
+            Nome = "Maria",
+            Cpf = "12345678900"
+        };
 
-            // Then
-            Assert.IsNotNull(resultado);
-            Assert.AreEqual("João", resultado.Nome);
-        }
+        // When / Then
+        var ex = Assert.ThrowsAsync<ValidationException>(async () => await _funcionarioService.Cadastrar(dto2));
+
+        Assert.That(ex.Erros, Does.Contain("Um usuário com esse CPF já existe no sistema"));
     }
 }
