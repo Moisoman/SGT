@@ -13,9 +13,6 @@ public class TicketGetDTO
     public Funcionario Funcionario { get; set; }
     
     [Required]
-    public long Quantidade { get; set; }
-    
-    [Required]
     public Ticket.TicketEnum Situacao { get; set; }
     
     public string NomeFuncionario { get; set; }
@@ -23,4 +20,6 @@ public class TicketGetDTO
     public string CpfFuncionario { get; set; }
     
     public long TotalQuantidade { get; set; }
+    
+    public List<Ticket> Tickets { get; set; } = new List<Ticket>(); 
 }

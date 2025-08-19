@@ -168,6 +168,7 @@ while (true)
             Console.WriteLine("1 - Cadastrar");
             Console.WriteLine("2 - Listar");
             Console.WriteLine("3 - Editar");
+            Console.WriteLine("4 - Relatorio por Funcionario");
             Console.WriteLine("0 - Voltar");
             Console.Write("Escolha: ");
 
@@ -216,7 +217,10 @@ while (true)
                         foreach (var ticket in listaTickets)
                         {
                             Console.WriteLine(
-                                $"Id:{ticket.IdTicket} \n FuncionarioId:{ticket.FuncionarioId} \n Quantidade:{ticket.Quantidade} \n Situação:{ticket.Situacao} \n"
+                                $"Id:{ticket.IdTicket} \n FuncionarioId:{ticket.FuncionarioId} \n " +
+                                $"Quantidade:{ticket.Quantidade}" +
+                                $" \n Situação:{ticket.Situacao}" +
+                                $" \n Data de Entrega:{ticket.DataEntrega}" 
                             );
                         }
                     }
@@ -272,6 +276,53 @@ while (true)
                     }
                     break;
 
+                case "4":
+                    Console.Write("Informe o ID do Funcionário: ");
+                    if (!long.TryParse(Console.ReadLine(), out long Id))
+                    {
+                        Console.WriteLine("ID inválido.");
+                        break;
+                    }
+
+                    Console.Write("Informe a data de início (formato Ano-Mes-Dia): ");
+                    if (!DateTime.TryParse(Console.ReadLine(), out DateTime dataInicio))
+                    {
+                        Console.WriteLine("Data de início inválida.");
+                        break;
+                    }
+
+                    
+                    dataInicio = dataInicio.ToUniversalTime();
+
+                    Console.Write("Informe a data de fim (formato Ano-Mes-dia): ");
+                    if (!DateTime.TryParse(Console.ReadLine(), out DateTime dataFim))
+                    {
+                        Console.WriteLine("Data de fim inválida.");
+                        break;
+                    }
+                    
+                    dataFim = dataFim.ToUniversalTime();
+
+                    try
+                    {
+                        var relatorio = await ticketController.Relatorio(Id, dataInicio, dataFim);
+        
+                        Console.WriteLine($"\nRelatório de Tickets de {relatorio.NomeFuncionario} ({relatorio.CpfFuncionario}):");
+                        Console.WriteLine($"Total de Tickets entregues: {relatorio.TotalQuantidade}");
+                        foreach (var ticket in relatorio.Tickets)
+                        {
+                            Console.WriteLine($"\nTicket ID: {ticket.IdTicket}");
+                            Console.WriteLine($"Quantidade: {ticket.Quantidade}");
+                            Console.WriteLine($"Situação: {ticket.Situacao}");
+                            Console.WriteLine($"Data de Entrega: {ticket.DataEntrega.ToString("yyyy-MM-dd HH:mm:ss")}");
+                        }
+                    }   
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Erro: {ex.Message}");
+                    }
+                    break;
+
                 case "0":
                     break;
 
@@ -280,7 +331,6 @@ while (true)
                     break;
             }
             break;
-
         case "0":
             return;
 

@@ -29,6 +29,13 @@ public class TicketService
      */
     public async Task<TicketGetDTO> Relatorio(long funcionarioId, DateTime dataInicio, DateTime dataFim)
     { 
+        //Tratamento das datas, transoformando em UTC para ser compatível com o banco
+        dataInicio = dataInicio.ToUniversalTime();
+        dataFim = dataFim.ToUniversalTime();
+        //Tratando a interpretação das datas para que a query do relatorio funcione com o dia presente
+        dataInicio = dataInicio.Date;
+        dataFim = dataFim.Date.AddDays(1).AddTicks(-1);
+        
         var tickets = await _context.Tickets
             .Where(t => t.FuncionarioId == funcionarioId && t.DataEntrega >= dataInicio && t.DataEntrega <= dataFim)
             .Include(t => t.Funcionario) 
@@ -48,8 +55,13 @@ public class TicketService
             FuncionarioId = funcionarioId,
             NomeFuncionario = tickets.First().Funcionario.Nome, 
             CpfFuncionario =  tickets.First().Funcionario.Cpf,
+            Tickets = tickets.Select(t => new Ticket
+            {
+                IdTicket = t.IdTicket,
+                Situacao = t.Situacao,
+                DataEntrega = t.DataEntrega
+            }).ToList()
         };
-
         return data;
     }
     /**
@@ -69,6 +81,7 @@ public class TicketService
         ticket.Quantidade = 1;
         ticket.Situacao = Ticket.TicketEnum.A;
         ticket.DataEntrega = DateTime.UtcNow; //UtcNow pois é o tipo de datetime compatível com o banco PgSql
+        ticket.DataAlteracao = DateTime.UtcNow;
         
         await _context.Tickets.AddAsync(ticket);
         await _context.SaveChangesAsync();
@@ -112,6 +125,8 @@ public class TicketService
         {
             throw new ValidationException(erros);
         }
+        
+        ticketExistente.DataAlteracao = DateTime.UtcNow;
         
         await _context.SaveChangesAsync();
 

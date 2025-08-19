@@ -5,14 +5,12 @@ namespace SGTApp.dto.FuncionarioDTO;
 
 public class FuncionarioGetDTO
 {
+    public long IdFuncionario { get; set; }
     
-    [Required]
     public string Nome { get; set; }
     
-    [Required]
     public string Cpf { get; set; }
-
-    [Required]
+    
     public string Situacao { get; set; }
 
     public DateTime DataAlteracao { get; set; }
