@@ -4,13 +4,15 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using SGT.entities;
-using SGTApp.data;
+using SGTApp.config;
 using SGTApp.dto.TicketDTO;
 using SGTApp.services;
 using SGTApp.utils;
 
 namespace SGTApp.Tests.services;
-
+/**
+ * Teste unitário do serviço de Ticket
+ */
 [TestFixture]
 public class TicketServiceTest
 {

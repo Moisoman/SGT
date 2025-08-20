@@ -1,7 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore;
 using SGT.entities;
-using SGTApp.data;
+using SGTApp.config;
 using SGTApp.dto.FuncionarioDTO;
 using SGTApp.utils;
 
@@ -19,16 +19,25 @@ public class FuncionarioService
         _context = context;
     }
 
+    /**
+     * Metodo para listar todos os funcionarios do sistema
+     */
     public async Task<List<Funcionario>> Listar()
     {
         return await _context.Funcionarios.ToListAsync();
     }
 
+    /**
+     * Metodo para ler um funcionario especifico usando o ID como parametro
+     */
     public async Task<Funcionario> Ler(long id)
     {
         return await _context.Funcionarios.FindAsync(id);
     }
     
+    /**
+     * Metodo para cadastrar um funcionario passando o DTO de post como parametro
+     */
     public async Task<Funcionario> Cadastrar(FuncionarioPostDTO dto)
     {
         List<string> erros = new List<string>();
@@ -73,6 +82,10 @@ public class FuncionarioService
         return funcionario;
     }
 
+    /**
+     * Metodo para Edição de um Funcionario específico
+     * passando DTO de put e ID como parametro
+     */
     public async Task<Funcionario> Editar(FuncionarioPutDTO dto, long id)
     {
         List<string> erros = new List<string>();

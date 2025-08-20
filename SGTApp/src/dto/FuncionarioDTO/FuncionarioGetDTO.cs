@@ -2,7 +2,9 @@
 using SGT.entities;
 
 namespace SGTApp.dto.FuncionarioDTO;
-
+/**
+ * DTO de saída de Funcionario
+ */
 public class FuncionarioGetDTO
 {
     public long IdFuncionario { get; set; }

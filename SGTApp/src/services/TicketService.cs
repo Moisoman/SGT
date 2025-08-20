@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SGT.entities;
-using SGTApp.data;
+using SGTApp.config;
 using SGTApp.dto.FuncionarioDTO;
 using SGTApp.dto.TicketDTO;
 using SGTApp.utils;

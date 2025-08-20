@@ -2,7 +2,9 @@
 using SGT.entities;
 
 namespace SGTApp.dto.TicketDTO;
-
+/**
+ * DTO para Cadastro/POST de um ticket
+ */
 public class TicketPostDTO
 {
     [Required]

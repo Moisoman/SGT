@@ -2,7 +2,9 @@
 using SGT.entities;
 
 namespace SGTApp.dto.TicketDTO;
-
+/**
+ * DTO para atualização/PUT de um Ticket
+ */
 public class TicketPutDTO
 {
     [Required]

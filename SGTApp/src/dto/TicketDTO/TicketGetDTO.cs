@@ -2,7 +2,9 @@
 using SGT.entities;
 
 namespace SGTApp.dto.TicketDTO;
-
+/**
+ * DTO para saída de um Ticket
+ */
 public class TicketGetDTO
 {
     [Key]

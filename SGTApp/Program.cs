@@ -1,17 +1,25 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SGT.entities;
 using SGTApp.controllers;
-using SGTApp.data;
+using SGTApp.config;
 using SGTApp.dto.FuncionarioDTO;
 using SGTApp.dto.TicketDTO;
 using SGTApp.services;
 using SGTApp.utils;
 
+
+var builder = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory()) 
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+var configuration = builder.Build(); 
+
 var services = new ServiceCollection();
 
 services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql("Host=localhost;Port=5432;Username=postgres;Password=123456789;Database=Sgtapp"));
+    options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
 
 var serviceProvider = services.BuildServiceProvider();

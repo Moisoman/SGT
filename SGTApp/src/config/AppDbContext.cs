@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SGT.entities;
 
-namespace SGTApp.data;
+namespace SGTApp.config;
 
 public class AppDbContext : DbContext
 {

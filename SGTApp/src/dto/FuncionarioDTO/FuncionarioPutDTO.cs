@@ -2,7 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace SGTApp.dto.FuncionarioDTO;
-
+/**
+ * DTO para PUT/Edição de um funcionário
+ */
 public class FuncionarioPutDTO
 {
     [Required]
