@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -10,16 +11,12 @@ namespace SGTApp.config
     {
         public AppDbContext CreateDbContext(string[] args)
         {
-            //AppSettings deveria estar no GitIgnore 
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+            Env.Load();
             
-            var configuration = builder.Build();
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            var configuration = Environment.GetEnvironmentVariable("DB_CONNECTION"); ;
             
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-            optionsBuilder.UseNpgsql(connectionString);
+            optionsBuilder.UseNpgsql(configuration);
 
             return new AppDbContext(optionsBuilder.Options);
         }

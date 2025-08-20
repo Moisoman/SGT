@@ -1,7 +1,10 @@
+using System.Configuration;
+using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SGT.entities;
+using SGTApp;
 using SGTApp.controllers;
 using SGTApp.config;
 using SGTApp.dto.FuncionarioDTO;
@@ -9,17 +12,14 @@ using SGTApp.dto.TicketDTO;
 using SGTApp.services;
 using SGTApp.utils;
 
+Env.Load();
 
-var builder = new ConfigurationBuilder()
-    .SetBasePath(Directory.GetCurrentDirectory()) 
-    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
-var configuration = builder.Build(); 
-
+var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION");
+Console.WriteLine($"DB_CONNECTION: {connectionString}");
 var services = new ServiceCollection();
 
 services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString));
 
 
 var serviceProvider = services.BuildServiceProvider();
