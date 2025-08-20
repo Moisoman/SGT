@@ -10,4 +10,4 @@ O arquivo `.env`, o qual contém as variáveis de ambiente, foi commitado no Git
 
 ## Sobre os Testes
 
-Foram feitos testes para os serviços do sistema, por questões de organização eles estão localizados em uma outra solução `SGTTESTES`, para rodar os testes é possível clicar com o botão direito do mouse e escolher a opção Run Unit Tests.
+Foram feitos testes para os serviços do sistema, por questões de organização eles estão localizados em uma outra solução `SGTTESTES`, para rodar os testes é possível clicar com o botão direito do mouse e escolher a opção **_Run Unit Tests_**.
